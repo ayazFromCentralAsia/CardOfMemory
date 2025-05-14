@@ -1,3 +1,6 @@
+DROP TYPE IF EXISTS topic;
+DROP TYPE IF EXISTS role;
+
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TYPE topic AS ENUM (
@@ -11,11 +14,16 @@ CREATE TYPE topic AS ENUM (
     'SYSTEM_DESIGN'
 );
 
+CREATE TYPE role AS ENUM (
+    'ADMIN',
+    'USER'
+);
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    role role NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
 

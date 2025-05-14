@@ -23,11 +23,11 @@ public class CardProgress {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
-    private Card cardId;
+    private Card card;
 
     @Column(name = "known")
     private Boolean known;
