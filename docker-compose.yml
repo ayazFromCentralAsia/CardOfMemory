@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    image: backend-app:latest
+    container_name: backend-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - DB_testing
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://DB_testing:5432/card_of_memory
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123321
+    networks:
+      - app_network
+
+  DB_testing:
+    image: postgres
+    restart: always
+    container_name: app-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123321
+      POSTGRES_DB: card_of_memory
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge

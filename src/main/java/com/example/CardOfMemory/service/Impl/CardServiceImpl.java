@@ -5,6 +5,7 @@ import com.example.CardOfMemory.dto.card.CardRequest;
 import com.example.CardOfMemory.dto.card.CardResponse;
 import com.example.CardOfMemory.entity.Card;
 import com.example.CardOfMemory.entity.User;
+import com.example.CardOfMemory.enums.Role;
 import com.example.CardOfMemory.enums.Topic;
 import com.example.CardOfMemory.filter.CardSpecification;
 import com.example.CardOfMemory.repository.CardRepository;
@@ -33,7 +34,9 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardResponse createCard(CardRequest cardRequest) {
         log.info("Создание новой карточки");
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
         User owner = userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("Пользователь с таким email не найден"));
 
@@ -82,5 +85,76 @@ public class CardServiceImpl implements CardService {
         log.info("Сформирована спецификация: {}", spec);
 
         return cardRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public CardResponse getCard(UUID id) {
+        log.info("Получение карточки с id: {}", id);
+
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Карточка с таким id не найдена"));
+
+        log.info("Найдена карточка: {}", card);
+
+        return new CardResponse(
+                card.getId(),
+                card.getDifficulty(),
+                card.getTopic(),
+                card.getOwner().getId(),
+                card.getCreatedAt(),
+                card.getUpdatedAt());
+    }
+
+    @Override
+    public void deleteCard(UUID id) {
+        log.info("Удаление карточки с id: {}", id);
+
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Карточка с таким id не найдена"));
+
+        checkOwner(card);
+
+        cardRepository.delete(card);
+
+        log.info("Карточка удалена");
+    }
+
+
+    @Override
+    public CardResponse editCard(UUID id, CardRequest cardRequest) {
+        log.info("Редактирование карточки с id: {}", id);
+
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Карточка с таким id не найдена"));
+
+        checkOwner(card);
+
+        card.setQuestion(cardRequest.getQuestion());
+        card.setAnswer(cardRequest.getAnswer());
+        card.setDifficulty(cardRequest.getDifficulty());
+        card.setTopic(cardRequest.getTopic());
+        card.setUpdatedAt(LocalDateTime.now());
+
+        Card savedCard = cardRepository.save(card);
+
+        log.info("Карточка успешно отредактирована");
+        return new CardResponse(
+                savedCard.getId(),
+                savedCard.getDifficulty(),
+                savedCard.getTopic(),
+                savedCard.getOwner().getId(),
+                savedCard.getCreatedAt(),
+                savedCard.getUpdatedAt());
+    }
+
+    private void checkOwner(Card card) {
+        User owner = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication()
+                .getName()).orElseThrow(() -> new IllegalArgumentException("Пользователь с таким email не найден"));
+
+        if (!card.getOwner().getId().equals(owner.getId()) && owner.getRole() == Role.USER) {
+            throw new IllegalArgumentException("Нельзя удалять карточку, которой не принадлежит пользователь");
+        } else if (owner.getRole() == Role.ADMIN) {
+            log.info("Пользователь имеет право удалять карточку");
+        }
     }
 }

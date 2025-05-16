@@ -28,7 +28,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
                     corsConfiguration.addAllowedOrigin("http://localhost:3000");
-                    corsConfiguration.addAllowedOrigin("http://00.000.000.000:3000");
+                    corsConfiguration.addAllowedOrigin("http://185.29.184.234:3000");
                     corsConfiguration.addAllowedMethod("*");
                     corsConfiguration.addAllowedHeader("*");
                     corsConfiguration.setAllowCredentials(true);

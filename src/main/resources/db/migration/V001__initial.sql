@@ -42,6 +42,8 @@ CREATE TABLE card_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     card_id UUID NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
+    score SMALLINT NOT NULL CHECK (score BETWEEN 0 AND 10),
+    answered VARCHAR(1000),
     known BOOLEAN DEFAULT FALSE,
-    last_reviewed TIMESTAMP
+    created_at TIMESTAMP
 );

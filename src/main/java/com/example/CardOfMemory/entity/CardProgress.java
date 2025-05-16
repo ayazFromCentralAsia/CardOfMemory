@@ -29,9 +29,15 @@ public class CardProgress {
     @JoinColumn(name = "card_id")
     private Card card;
 
+    @Column (name = "score")
+    private Integer score;
+
+    @Column(name = "answered")
+    private String answered;
+
     @Column(name = "known")
     private Boolean known;
 
-    @Column(name = "last_reviewed")
-    private LocalDateTime lastReviewed;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

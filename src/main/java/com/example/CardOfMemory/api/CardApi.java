@@ -29,19 +29,51 @@ import java.util.UUID;
 public class CardApi {
     private final CardService cardService;
 
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
-    @PostMapping("/create")
+
     @Operation(
             summary = "Создание новой карты",
             description = "Создание новой карты с предоставленными данными. "
     )
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @PostMapping("/create")
     public CardResponse createCard(@Validated @RequestBody CardRequest cardRequest){
         return cardService.createCard(cardRequest);
     }
 
+    @Operation(
+            summary = "Получение карты по ID",
+            description = "Получение карты по ID. "
+    )
+    @GetMapping("/{id}")
+    public CardResponse getCard(@PathVariable UUID id) {
+        return cardService.getCard(id);
+    }
 
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @Operation(
+            summary = "Удаление карты по ID",
+            description = "Удаление карты по ID. Удалить карту могут владельцы или администраторы. "
+    )
+    @DeleteMapping("/{id}")
+    public void deleteCard(@PathVariable UUID id) {
+        cardService.deleteCard(id);
+    }
 
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    @Operation(
+            summary = "Редактирование карты",
+            description = "Редактирование карты. "
+    )
+    @PutMapping("/{id}")
+    public CardResponse editCard(@PathVariable UUID id, @Validated @RequestBody CardRequest cardRequest) {
+        return cardService.editCard(id, cardRequest);
+    }
 
+    @Operation(
+            summary = "Фильтер подбора карточек",
+            description = "Фильтрация карточек по теме, сложности, " +
+                    "владельцу, известности, поисковому запросу. "
+    )
     @GetMapping
     public Page<Card> getCards(
             @RequestParam(required = false) Topic topic,
