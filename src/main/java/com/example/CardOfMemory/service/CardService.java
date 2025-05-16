@@ -21,4 +21,9 @@ public interface CardService {
             int size
     );
 
+    CardResponse getCard(UUID id);
+
+    void deleteCard(UUID id);
+
+    CardResponse editCard(UUID id, CardRequest cardRequest);
 }

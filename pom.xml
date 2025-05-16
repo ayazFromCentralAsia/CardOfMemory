@@ -44,6 +44,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
@@ -116,7 +120,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>10.20.1</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/card_of_memory</url>
+					<url>jdbc:postgresql://localhost:5432/memory_card</url>
 					<user>postgres</user>
 					<password>123321</password>
 					<cleanDisabled>false</cleanDisabled>
