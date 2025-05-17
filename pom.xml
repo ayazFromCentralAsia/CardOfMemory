@@ -120,9 +120,9 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>10.20.1</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/memory_card</url>
-					<user>postgres</user>
-					<password>123321</password>
+					<url>${env.SPRING_FLYWAY_URL}</url>
+					<user>${env.SPRING_FLYWAY_USER}</user>
+					<password>${env.SPRING_FLYWAY_PASSWORD}</password>
 					<cleanDisabled>false</cleanDisabled>
 					<schemas>public</schemas>
 					<locations>filesystem:src/main/resources/db/migration</locations>
