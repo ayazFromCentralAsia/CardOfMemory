@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Список карт</title>
+</head>
+<body>
+<h1>Карты</h1>
+
+<a href="/cards/create">Создать новую карту</a>
+
+<form action="#" method="get">
+    <input type="text" name="search" placeholder="Поиск..." th:value="${search}" />
+    <select name="topic">
+        <option value="" th:selected="${topic == null}">Все темы</option>
+        <option th:each="t : ${T(com.example.model.Topic).values()}"
+                th:value="${t}"
+                th:text="${t}"
+                th:selected="${t == topic}"></option>
+    </select>
+    <input type="number" name="difficulty" placeholder="Сложность" min="1" max="10" th:value="${difficulty}" />
+    <button type="submit">Фильтровать</button>
+</form>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Тема</th>
+        <th>Сложность</th>
+        <th>Владелец</th>
+        <th>Известна</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="card : ${cardsPage.content}">
+        <td th:text="${card.id}">ID</td>
+        <td th:text="${card.topic}">Topic</td>
+        <td th:text="${card.difficulty}">Difficulty</td>
+        <td th:text="${card.owner}">Owner</td>
+        <td th:text="${card.known} ? 'Да' : 'Нет'">Known</td>
+        <td>
+            <a th:href="@{'/cards/' + ${card.id}}">Просмотр</a>
+            <a th:href="@{'/cards/' + ${card.id} + '/edit'}">Редактировать</a>
+            <form th:action="@{'/cards/' + ${card.id} + '/delete'}" method="post" style="display:inline">
+                <button type="submit" onclick="return confirm('Удалить карту?')">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <span>Страница <span th:text="${cardsPage.number + 1}"></span> из <span th:text="${cardsPage.totalPages}"></span></span>
+    <div>
+        <a th:if="${cardsPage.hasPrevious()}" th:href="@{|/cards?page=${cardsPage.number - 1}|}">Предыдущая</a>
+        <a th:if="${cardsPage.hasNext()}" th:href="@{|/cards?page=${cardsPage.number + 1}|}">Следующая</a>
+    </div>
+</div>
+
+</body>
+</html>

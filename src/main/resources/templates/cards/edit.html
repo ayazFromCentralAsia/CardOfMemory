@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Редактировать карту</title>
+</head>
+<body>
+<h1>Редактировать карту</h1>
+
+<form th:action="@{'/cards/' + ${cardId} + '/edit'}" th:object="${cardRequest}" method="post">
+    <div>
+        <label>Тема:</label>
+        <select th:field="*{topic}">
+            <option th:each="t : ${T(com.example.model.Topic).values()}"
+                    th:value="${t}" th:text="${t}"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('topic')}" th:errors="*{topic}"></div>
+    </div>
+    <div>
+        <label>Сложность:</label>
+        <input type="number" th:field="*{difficulty}" min="1" max="10"/>
+        <div th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></div>
+    </div>
+    <div>
+        <label>Известна:</label>
+        <input type="checkbox" th:field="*{known}" />
+    </div>
+    <!-- Остальные поля, как в create -->
+    <button type="submit">Сохранить</button>
+</form>
+
+<a th:href="@{'/cards/' + ${cardId}}">Отмена</a>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="token" th:content="${token}">
+    <title>Answer Result</title>
+</head>
+<body>
+<h1>Результат ответа</h1>
+
+<p><strong>Карточка:</strong> <span th:text="${result.cardId}"></span></p>
+<p><strong>Правильность:</strong> <span th:text="${result.correct} ? 'Верно' : 'Неверно'"></span></p>
+<p><strong>Комментарий:</strong> <span th:text="${result.comment}"></span></p>
+
+<a href="/card/progress">К прогрессу</a>
+</body>
+</html>

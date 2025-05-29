@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="token" th:content="${token}">
+    <title>Прогресс по карточке</title>
+</head>
+<body>
+<h1>Прогресс карточки</h1>
+
+<p><strong>ID:</strong> <span th:text="${progress.cardId}"></span></p>
+<p><strong>Попыток:</strong> <span th:text="${progress.attempts}"></span></p>
+<p><strong>Верных ответов:</strong> <span th:text="${progress.correctAnswers}"></span></p>
+
+<a href="/card/all-progress">К общему прогрессу</a>
+</body>
+</html>

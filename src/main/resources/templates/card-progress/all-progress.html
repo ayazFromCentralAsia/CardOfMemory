@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="token" th:content="${token}">
+    <title>Общий прогресс</title>
+</head>
+<body>
+<h1>Общий прогресс по карточкам</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Попытки</th>
+        <th>Верные ответы</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="progress : ${progressList}">
+        <td th:text="${progress.cardId}"></td>
+        <td th:text="${progress.attempts}"></td>
+        <td th:text="${progress.correctAnswers}"></td>
+        <td>
+            <form th:action="@{/card/delete/{id}(id=${progress.cardId})}" method="post">
+                <input type="hidden" name="token" th:value="${token}">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Детали карты</title>
+</head>
+<body>
+<h1>Детали карты</h1>
+
+<p><strong>ID:</strong> <span th:text="${card.id}"></span></p>
+<p><strong>Тема:</strong> <span th:text="${card.topic}"></span></p>
+<p><strong>Сложность:</strong> <span th:text="${card.difficulty}"></span></p>
+<p><strong>Владелец:</strong> <span th:text="${card.owner}"></span></p>
+<p><strong>Известна:</strong> <span th:text="${card.known} ? 'Да' : 'Нет'"></span></p>
+
+<a th:href="@{'/cards/' + ${card.id} + '/edit'}">Редактировать</a>
+<a href="/cards">Назад к списку</a>
+
+</body>
+</html>

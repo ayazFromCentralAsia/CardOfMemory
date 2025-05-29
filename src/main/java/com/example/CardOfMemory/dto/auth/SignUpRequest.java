@@ -21,6 +21,6 @@ public class SignUpRequest {
     @NotBlank
     private String password;
     @Schema(description = "Роль пользователя", example = "USER")
-    @NotBlank
+    @NotNull
     private Role role;
 }

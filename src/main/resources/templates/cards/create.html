@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8" />
+    <title>Создать карту</title>
+</head>
+<body>
+<h1>Создать новую карту</h1>
+
+<form th:action="@{/cards/create}" th:object="${cardRequest}" method="post">
+    <div>
+        <label>Тема:</label>
+        <select th:field="*{topic}">
+            <option th:each="t : ${T(com.example.model.Topic).values()}"
+                    th:value="${t}" th:text="${t}"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('topic')}" th:errors="*{topic}"></div>
+    </div>
+    <div>
+        <label>Сложность:</label>
+        <input type="number" th:field="*{difficulty}" min="1" max="10"/>
+        <div th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></div>
+    </div>
+    <div>
+        <label>Известна:</label>
+        <input type="checkbox" th:field="*{known}" />
+    </div>
+    <!-- Добавь остальные поля cardRequest, которые нужны -->
+    <button type="submit">Создать</button>
+</form>
+
+<a href="/cards">Отмена</a>
+
+</body>
+</html>
