@@ -121,21 +121,24 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.3.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/me.paulschwarz/spring-dotenv -->
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
-				<version>10.20.1</version>
 				<configuration>
-					<url>${env.SPRING_FLYWAY_URL}</url>
-					<user>${env.SPRING_FLYWAY_USER}</user>
-					<password>${env.SPRING_FLYWAY_PASSWORD}</password>
-					<cleanDisabled>false</cleanDisabled>
-					<schemas>public</schemas>
-					<locations>filesystem:src/main/resources/db/migration</locations>
+					<url>${spring.flyway.url}</url>
+					<user>${spring.flyway.user}</user>
+					<password>${spring.flyway.password}</password>
 				</configuration>
 			</plugin>
 			<plugin>

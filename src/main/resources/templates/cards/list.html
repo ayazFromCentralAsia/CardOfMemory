@@ -12,13 +12,15 @@
 <form action="#" method="get">
     <input type="text" name="search" placeholder="Поиск..." th:value="${search}" />
     <select name="topic">
-        <option value="" th:selected="${topic == null}">Все темы</option>
-        <option th:each="t : ${T(com.example.model.Topic).values()}"
+        <option value="" th:selected="${topic == null or topic == ''}">Все темы</option>
+        <option th:each="t : ${T(com.example.CardOfMemory.enums.Topic).values()}"
                 th:value="${t}"
                 th:text="${t}"
-                th:selected="${t == topic}"></option>
+                th:selected="${t.toString() == topic}">
+        </option>
     </select>
     <input type="number" name="difficulty" placeholder="Сложность" min="1" max="10" th:value="${difficulty}" />
+    <input type="text" name="owner" placeholder="Владелец UUID" th:value="${owner}" />
     <button type="submit">Фильтровать</button>
 </form>
 
@@ -29,7 +31,6 @@
         <th>Тема</th>
         <th>Сложность</th>
         <th>Владелец</th>
-        <th>Известна</th>
         <th>Действия</th>
     </tr>
     </thead>
@@ -39,7 +40,6 @@
         <td th:text="${card.topic}">Topic</td>
         <td th:text="${card.difficulty}">Difficulty</td>
         <td th:text="${card.owner}">Owner</td>
-        <td th:text="${card.known} ? 'Да' : 'Нет'">Known</td>
         <td>
             <a th:href="@{'/cards/' + ${card.id}}">Просмотр</a>
             <a th:href="@{'/cards/' + ${card.id} + '/edit'}">Редактировать</a>
@@ -54,10 +54,17 @@
 <div>
     <span>Страница <span th:text="${cardsPage.number + 1}"></span> из <span th:text="${cardsPage.totalPages}"></span></span>
     <div>
-        <a th:if="${cardsPage.hasPrevious()}" th:href="@{|/cards?page=${cardsPage.number - 1}|}">Предыдущая</a>
-        <a th:if="${cardsPage.hasNext()}" th:href="@{|/cards?page=${cardsPage.number + 1}|}">Следующая</a>
+        <a th:if="${cardsPage.hasPrevious()}"
+           th:href="@{|/cards?page=${cardsPage.number - 1}&search=${search}&topic=${topic != null ? topic : ''}&difficulty=${difficulty != null ? difficulty : ''}&owner=${owner != null ? owner : ''}|}">
+            Предыдущая
+        </a>
+        <a th:if="${cardsPage.hasNext()}"
+           th:href="@{|/cards?page=${cardsPage.number + 1}&search=${search}&topic=${topic != null ? topic : ''}&difficulty=${difficulty != null ? difficulty : ''}&owner=${owner != null ? owner : ''}|}">
+            Следующая
+        </a>
     </div>
 </div>
+
 
 </body>
 </html>

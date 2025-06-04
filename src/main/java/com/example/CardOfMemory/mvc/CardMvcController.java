@@ -26,26 +26,44 @@ public class CardMvcController {
     // Список карт с фильтрами и пагинацией
     @GetMapping
     public String listCards(
-            @RequestParam(required = false) Topic topic,
-            @RequestParam(required = false) Integer difficulty,
-            @RequestParam(required = false) UUID owner,
-            @RequestParam(required = false) Boolean known,
+            @RequestParam(required = false, name = "topic") String topicStr,
+            @RequestParam(required = false, name = "difficulty") Integer difficulty,
+            @RequestParam(required = false) String owner,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        var cardsPage = cardService.getCards(topic, difficulty, owner, known, search, page, size);
+        Topic topic = null;
+        if (topicStr != null && !topicStr.isBlank() && !"null".equalsIgnoreCase(topicStr)) {
+            try {
+                topic = Topic.valueOf(topicStr);
+            } catch (IllegalArgumentException e) {
+                // Можно обработать ошибку или просто игнорировать (topic останется null)
+            }
+        }
+
+        UUID ownerUuid = null;
+        if (owner != null && !owner.isBlank()) {
+            try {
+                ownerUuid = UUID.fromString(owner);
+            } catch (IllegalArgumentException e) {
+                // логировать, но не прерывать
+            }
+        }
+
+        var cardsPage = cardService.getCards(topic, difficulty, ownerUuid, null, search, page, size);
 
         model.addAttribute("cardsPage", cardsPage);
-        model.addAttribute("topic", topic);
+        model.addAttribute("topic", topicStr); // чтобы не ломалась проверка в Thymeleaf
         model.addAttribute("difficulty", difficulty);
         model.addAttribute("owner", owner);
-        model.addAttribute("known", known);
         model.addAttribute("search", search);
 
         return "cards/list";
     }
+
+
 
     // Просмотр детали карты
     @GetMapping("/{id}")
